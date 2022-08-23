@@ -128,7 +128,7 @@ export function execADBCommandAsync(
     // 超过8s，进程自动退出
     exec(...ensureArgs(command, options), (err, stdout) => {
       if (err) return reject(err);
-      const msg = stdout.toString();
+      const msg: string = stdout.toString();
       return resolve(msg);
     });
   });
@@ -142,6 +142,10 @@ export function execADBCommandAsync(
  *  lsProcess.stdout.on('data',(data)=>{
  *    console.log(data.toString())
  *  })
+ *
+ *  const adbShell = spawnADBCommand('adb', ['shell'])
+ *  adbShell.stdin.write('ls /data/tmp \n')
+ *  adbShell.stdin.write('ls /data/tmp/dir \n')
  */
 export function execADBCommand(
   command: string,
@@ -153,11 +157,16 @@ export function execADBCommand(
 /**
  *  @description use spawn method to run adb commamnd, will return a ChildProcess
  *  so than you can control the adb process more finely
+ *  @description 使用 nodejs 子进程的exec方法运行一个 adb 命令，并返回这个子进程，使得你可以更细腻度的方式控制 adb 命令
  *  @example
- *  const lsProcess = spawnADBCommand('adb', ['shell','ls /data/tmp'])
+ *  const lsProcess = execADBCommand('adb shell ls /data/tmp')
  *  lsProcess.stdout.on('data',(data)=>{
  *    console.log(data.toString())
  *  })
+ *
+ *  const adbShell = spawnADBCommand('adb', ['shell'])
+ *  adbShell.stdin.write('ls /data/tmp \n')
+ *  adbShell.stdin.write('ls /data/tmp/dir \n')
  */
 export function spawnADBCommand(
   command: string,
