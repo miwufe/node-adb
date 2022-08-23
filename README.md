@@ -11,7 +11,7 @@ ndoe-adb 包含 adb 所需的二进制文件，所有你可以在 nodejs 程序�
 # useage
 
 ```ts
-import { getAdbDevices,} from 'ndoe-adb'
+import { getAdbDevices,execADBCommandSync,execADBCommandAsync,execADBCommand} from 'ndoe-adb'
 
 /**
  *  get adb devices list
@@ -43,7 +43,7 @@ const res = execADBCommandSync('adb devices');
  *  使用 nodejs 子进程的exec方法运行一个adb命令，并返回这个子进程，
  *  使得你可以更细腻度的方式控制 adb
  */
-const adbShell = spawnADBCommand('adb', ['shell'])
+const adbShell = execADBCommand('adb shell')
 adbShell.stdin.write('ls /data/tmp \n')
 adbShell.stdin.write('ls /data/tmp/dir \n')
 
