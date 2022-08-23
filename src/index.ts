@@ -22,7 +22,7 @@ function getAdbFullPath() {
     return ADB_BINARY_FILE[process.platform as SupportedPlatform];
   } catch (error) {
     throw new Error(
-      `Sorry, node-adb not support your system, supported platform has ${supportedPlatform.toString()}\n` +
+      `Sorry, @miwt/adb not support your system, supported platform has ${supportedPlatform.toString()}\n` +
         error
     );
   }
@@ -36,7 +36,7 @@ function getAdbReactivePath() {
     );
   } catch (error) {
     throw new Error(
-      `Sorry, node-adb not support your system, supported platform has ${supportedPlatform.toString()}` +
+      `Sorry, @miwt/adb not support your system, supported platform has ${supportedPlatform.toString()}` +
         error
     );
   }

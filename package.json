@@ -1,5 +1,5 @@
 {
-  "name": "tslib-starter",
+  "name": "@miwt/adb",
   "version": "0.0.1",
   "description": "you can use the ADB command in the nodejs program",
   "main": "dist/index.js",
@@ -16,7 +16,15 @@
       "import": "./dist/index.mjs"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miwufe/node-adb"
+  },
+  "bugs": {
+    "url": "https://github.com/miwufe/node-adb"
+  },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "tsup src/*.ts --format cjs,esm --dts --splitting --clean",
     "dev": "tsup src/*.ts --watch src",
     "release": "npm run build && npm run ver",
