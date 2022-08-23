@@ -1,0 +1,7 @@
+{
+  "header": "",
+  "skip": {
+    "tag": true,
+    "commit": true
+  }
+}

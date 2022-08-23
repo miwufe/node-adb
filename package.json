@@ -1,7 +1,7 @@
 {
   "name": "tslib-starter",
   "version": "0.0.1",
-  "description": "",
+  "description": "you can use the ADB command in the nodejs program",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -19,18 +19,21 @@
   "scripts": {
     "build": "tsup src/*.ts --format cjs,esm --dts --splitting --clean",
     "dev": "tsup src/*.ts --watch src",
-    "release": "npm run build && standard-version",
+    "release": "npm run build && npm run ver",
     "lint": "eslint --ext .js,.ts,.json ./",
     "fix": "eslint --ext .js,.ts,.json ./ --fix",
     "format": "prettier --config ./.prettierrc --write \"./**/*.{ts,js,json}\" ",
     "test": "vitest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "ver": "standard-version -r patch"
   },
   "author": "dongwa",
   "license": "MIT",
   "keywords": [
     "adb",
-    "android"
+    "android",
+    "adb shell",
+    "shell"
   ],
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
@@ -43,10 +46,10 @@
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^8.0.0",
     "prettier": "^2.6.2",
+    "standard-version": "^9.5.0",
     "typescript": "^4.6.4",
-    "vitest": "^0.22.1"
-  },
-  "dependencies": {
+    "vitest": "^0.22.1",
     "tsup": "^6.2.2"
-  }
+  },
+  "dependencies": {}
 }
