@@ -85,7 +85,7 @@ function ensureArgs(
 
 /** @description return adb devices  */
 export async function getAdbDevices() {
-  const list: string = await execADBCommandAsync('adb devices');
+  const list: string = await execAdbCmdAsync('adb devices');
   return _parseDeviceInfo(list);
   function _parseDeviceInfo(stdout: string) {
     if (!stdout) {
@@ -107,9 +107,9 @@ export async function getAdbDevices() {
 
 /**
  *  @description use sync method to run adb commamnd, will return a string
- *  @example execADBCommandSync('adb devices')
+ *  @example execAdbCmdSync('adb devices')
  */
-export function execADBCommandSync(
+export function execAdbCmdSync(
   command: string,
   options?: ExecSyncOptionsWithStringEncoding
 ) {
@@ -118,9 +118,9 @@ export function execADBCommandSync(
 
 /**
  *  @description use async method to run adb commamnd, will return a string
- *  @example execADBCommandAsync('adb devices')
+ *  @example execAdbCmdAsync('adb devices')
  */
-export function execADBCommandAsync(
+export function execAdbCmdAsync(
   command: string,
   options?: ExecSyncOptionsWithStringEncoding & { log?: any }
 ) {
@@ -138,16 +138,16 @@ export function execADBCommandAsync(
  *  @description use exec method to run adb commamnd, will return a ChildProcess
  *  so than you can control the adb process more finely
  *  @example
- *  const lsProcess = execADBCommand('adb shell ls /data/tmp')
+ *  const lsProcess = execAdbCmd('adb shell ls /data/tmp')
  *  lsProcess.stdout.on('data',(data)=>{
  *    console.log(data.toString())
  *  })
  *
- *  const adbShell = spawnADBCommand('adb', ['shell'])
+ *  const adbShell = spawnAdbCmd('adb', ['shell'])
  *  adbShell.stdin.write('ls /data/tmp \n')
  *  adbShell.stdin.write('ls /data/tmp/dir \n')
  */
-export function execADBCommand(
+export function execAdbCmd(
   command: string,
   options?: ExecSyncOptionsWithStringEncoding
 ) {
@@ -159,16 +159,16 @@ export function execADBCommand(
  *  so than you can control the adb process more finely
  *  @description 使用 nodejs 子进程的exec方法运行一个 adb 命令，并返回这个子进程，使得你可以更细腻度的方式控制 adb 命令
  *  @example
- *  const lsProcess = execADBCommand('adb shell ls /data/tmp')
+ *  const lsProcess = execAdbCmd('adb shell ls /data/tmp')
  *  lsProcess.stdout.on('data',(data)=>{
  *    console.log(data.toString())
  *  })
  *
- *  const adbShell = spawnADBCommand('adb', ['shell'])
+ *  const adbShell = spawnAdbCmd('adb', ['shell'])
  *  adbShell.stdin.write('ls /data/tmp \n')
  *  adbShell.stdin.write('ls /data/tmp/dir \n')
  */
-export function spawnADBCommand(
+export function spawnAdbCmd(
   command: string,
   args: string[],
   options?: ExecSyncOptionsWithStringEncoding

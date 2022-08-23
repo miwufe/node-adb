@@ -11,7 +11,7 @@ ndoe-adb 包含 adb 所需的二进制文件，所有你可以在 nodejs 程序�
 # useage
 
 ```ts
-import { getAdbDevices,execADBCommandSync,execADBCommandAsync,execADBCommand} from 'ndoe-adb'
+import { getAdbDevices,execAdbCmdSync,execAdbCmdAsync,execAdbCmd} from 'ndoe-adb'
 
 /**
  *  get adb devices list
@@ -24,7 +24,7 @@ cosnt list = await getAdbDevices()
  *  use sync method to run adb commamnd, will return a string
  *  同步方法运行一个 adb 命令
  */
-const res = execADBCommandSync('adb devices');
+const res = execAdbCmdSync('adb devices');
 // res: List of devices attached
 // 0e2e40071d40xxxx        device
 
@@ -32,7 +32,7 @@ const res = execADBCommandSync('adb devices');
  *  use async method to run adb commamnd, will return a string
  *  使用异步的方法运行一个 adb 命令
  */
- const res = await execADBCommandAsync('adb devices');
+ const res = await execAdbCmdAsync('adb devices');
 // res: List of devices attached
 // 0e2e40071d40xxxx        device
 
@@ -43,7 +43,7 @@ const res = execADBCommandSync('adb devices');
  *  使用 nodejs 子进程的exec方法运行一个adb命令，并返回这个子进程，
  *  使得你可以更细腻度的方式控制 adb
  */
-const adbShell = execADBCommand('adb shell')
+const adbShell = execAdbCmd('adb shell')
 adbShell.stdin.write('ls /data/tmp \n')
 adbShell.stdin.write('ls /data/tmp/dir \n')
 
@@ -53,7 +53,7 @@ adbShell.stdin.write('ls /data/tmp/dir \n')
  *  使用 nodejs 子进程的 spawn 方法运行一个adb命令，并返回这个子进程，
  *  使得你可以更细腻度的方式控制 adb
  */
-const adbShell = spawnADBCommand('adb', ['shell'])
+const adbShell = spawnAdbCmd('adb', ['shell'])
 adbShell.stdin.write('ls /data/tmp \n')
 adbShell.stdin.write('ls /data/tmp/dir \n')
 ```
