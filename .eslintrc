@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "env": {
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "plugins": ["prettier"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": "warn",
+    "no-async-promise-executor": "off"
+  },
+  "ignorePatterns": [
+    "tests",
+    "out",
+    "lib",
+    "dist",
+    "**/*.d.ts",
+    "tsconfig.json"
+  ]
+}
