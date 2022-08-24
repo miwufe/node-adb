@@ -3,6 +3,7 @@ import {
   execSync,
   spawn,
   ExecSyncOptionsWithStringEncoding,
+  ChildProcessWithoutNullStreams,
 } from 'child_process';
 import { dirname, resolve, relative } from 'path';
 
@@ -151,7 +152,9 @@ export function execAdbCmd(
   command: string,
   options?: ExecSyncOptionsWithStringEncoding
 ) {
-  return exec(...ensureArgs(command, options));
+  return exec(
+    ...ensureArgs(command, options)
+  ) as ChildProcessWithoutNullStreams;
 }
 
 /**
@@ -174,5 +177,5 @@ export function spawnAdbCmd(
   options?: ExecSyncOptionsWithStringEncoding
 ) {
   const [cmd, opts] = ensureArgs(command, options);
-  return spawn(cmd, args, opts);
+  return spawn(cmd, args, opts) as ChildProcessWithoutNullStreams;
 }
