@@ -5,7 +5,7 @@ import {
   ExecSyncOptionsWithStringEncoding,
   ChildProcessWithoutNullStreams,
 } from 'child_process';
-import { dirname, resolve, relative } from 'path';
+import path, { dirname, resolve, relative } from 'path';
 
 const TIMEOUT = 8 * 10000;
 const base = resolve(__dirname, '..', 'bin');
@@ -67,10 +67,8 @@ function ensureArgs(
   if (!isSystemAdbAvailable()) {
     let cmd = command.split(' ');
     const binFile = getAdbFullPath();
-    const binDir = dirname(binFile);
-    cwd = binDir;
-    const adbBin = binFile.replace(binDir, '.');
-    cmd[0] = `"${adbBin}"`;
+    cwd = dirname(binFile);
+    cmd[0] = path.basename(binFile);
     command = cmd.join(' ');
   }
   const res: [string, ExecSyncOptionsWithStringEncoding] = [
