@@ -33,7 +33,8 @@
     "format": "prettier --config ./.prettierrc --write \"./**/*.{ts,js,json}\" ",
     "test": "vitest",
     "prepare": "husky install",
-    "ver": "standard-version -r patch"
+    "verp": "standard-version -r patch",
+    "verm": "standard-version -r minor"
   },
   "author": "dongwa",
   "license": "MIT",
