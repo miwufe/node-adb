@@ -4,6 +4,7 @@ import {
   spawn,
   ExecSyncOptionsWithStringEncoding,
   ChildProcessWithoutNullStreams,
+  spawnSync,
 } from 'child_process';
 import path, { dirname, resolve, relative } from 'path';
 
@@ -13,7 +14,7 @@ const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
 type SupportedPlatform = typeof supportedPlatform[number];
 
 export const ADB_BINARY_FILE: Record<SupportedPlatform, string> = {
-  win32: resolve(base, 'window/adb.exe'),
+  win32: resolve(base, 'win/adb.exe'),
   darwin: resolve(base, 'mac/adb'),
   linux: resolve(base, 'linux/adb'),
 };
@@ -59,16 +60,19 @@ export type AdbDeviceStatus = 'offline' | 'device' | 'unauthorized';
 export const ipRegExp =
   /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):(\d+)$/;
 
-function ensureArgs(
+export function ensureArgs(
   command: string,
-  options?: ExecSyncOptionsWithStringEncoding
+  options?: ExecSyncOptionsWithStringEncoding,
+  isSwapn = false
 ) {
   let cwd = options?.cwd || process.cwd();
   if (!isSystemAdbAvailable()) {
     let cmd = command.split(' ');
     const binFile = getAdbFullPath();
     cwd = dirname(binFile);
-    cmd[0] = path.basename(binFile);
+    cmd[0] = isSwapn
+      ? `./${path.basename(binFile)}`
+      : `"./${path.basename(binFile)}"`;
     command = cmd.join(' ');
   }
   const res: [string, ExecSyncOptionsWithStringEncoding] = [
@@ -160,11 +164,6 @@ export function execAdbCmd(
  *  so than you can control the adb process more finely
  *  @description 使用 nodejs 子进程的exec方法运行一个 adb 命令，并返回这个子进程，使得你可以更细腻度的方式控制 adb 命令
  *  @example
- *  const lsProcess = execAdbCmd('adb shell ls /data/tmp')
- *  lsProcess.stdout.on('data',(data)=>{
- *    console.log(data.toString())
- *  })
- *
  *  const adbShell = spawnAdbCmd('adb', ['shell'])
  *  adbShell.stdin.write('ls /data/tmp \n')
  *  adbShell.stdin.write('ls /data/tmp/dir \n')
@@ -174,6 +173,20 @@ export function spawnAdbCmd(
   args: string[],
   options?: ExecSyncOptionsWithStringEncoding
 ) {
-  const [cmd, opts] = ensureArgs(command, options);
+  const [cmd, opts] = ensureArgs(command, options, true);
+  console.log('cmd', cmd, opts);
   return spawn(cmd, args, opts) as ChildProcessWithoutNullStreams;
+}
+
+/**
+ *  @description use sync spawn method to run adb commamnd, will return a string
+ *  @example spawnSyncAdbCmd('adb', ['devices'])
+ */
+export function spawnSyncAdbCmd(
+  command: string,
+  args?: string[],
+  options?: ExecSyncOptionsWithStringEncoding
+) {
+  const [cmd, opts] = ensureArgs(command, options, true);
+  return spawnSync(cmd, args, opts);
 }
