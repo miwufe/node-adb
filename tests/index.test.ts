@@ -4,6 +4,7 @@ import {
   spawnAdbCmd,
   execAdbCmd,
   getAdbDevices,
+  spawnSyncAdbCmd,
 } from '../src';
 
 describe('run adb cmd', () => {
@@ -43,6 +44,12 @@ describe('run adb cmd', () => {
         resolve();
       });
     });
+  });
+
+  it('spwanSync', () => {
+    const res = spawnSyncAdbCmd('adb', ['devices']);
+    console.log('spawnSyncAdbCmd', res);
+    expect(res);
   });
 });
 
