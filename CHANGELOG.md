@@ -1,4 +1,17 @@
 
+### 0.3.1-beta.1 (2022-09-06)
+
+
+### Features
+
+* add spawnSyncAdbCmd api ([a199d48](https://github.com/miwufe/node-adb/commit/a199d48561501f847bd1028393074667646e3f86))
+
+
+### Bug Fixes
+
+* fix C:\\WINDOWS\\system32\\cmd.exe ENOENT ([9cd00e4](https://github.com/miwufe/node-adb/commit/9cd00e4baf265ffe92f9ee8f8f882c8a4f01f4b5))
+* fix cmd.exe ENOENT error ([3289f2c](https://github.com/miwufe/node-adb/commit/3289f2ce2eaa33fc8f0c73025ea283ddbce53bd4))
+
 ### 0.3.1-0 (2022-09-01)
 
 
