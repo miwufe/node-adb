@@ -10,8 +10,8 @@ import path, { dirname, resolve, relative } from 'path';
 
 const TIMEOUT = 8 * 10000;
 const base = resolve(__dirname, '..', 'bin');
-const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
-type SupportedPlatform = typeof supportedPlatform[number];
+export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
+export type SupportedPlatform = typeof supportedPlatform[number];
 
 export const ADB_BINARY_FILE: Record<SupportedPlatform, string> = {
   win32: resolve(base, 'win/adb.exe'),
@@ -19,7 +19,7 @@ export const ADB_BINARY_FILE: Record<SupportedPlatform, string> = {
   linux: resolve(base, 'linux/adb'),
 };
 
-function getAdbFullPath() {
+export function getAdbFullPath() {
   try {
     return ADB_BINARY_FILE[process.platform as SupportedPlatform];
   } catch (error) {
@@ -30,7 +30,7 @@ function getAdbFullPath() {
   }
 }
 
-function getAdbReactivePath() {
+export function getAdbReactivePath() {
   try {
     return relative(
       __dirname,
