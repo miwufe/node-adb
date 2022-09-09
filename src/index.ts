@@ -69,7 +69,7 @@ export function ensureArgs(
   if (!isSystemAdbAvailable()) {
     let cmd = command.split(' ');
     const binFile = getAdbReactivePath(cwd as string);
-    cmd[0] = isSwapn ? binFile : `"${binFile}`;
+    cmd[0] = binFile;
     command = cmd.join(' ');
   }
   const res: [string, ExecSyncOptionsWithStringEncoding] = [
