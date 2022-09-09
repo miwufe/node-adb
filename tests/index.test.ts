@@ -48,7 +48,7 @@ describe('run adb cmd', () => {
 
   it('spwanSync', () => {
     const res = spawnSyncAdbCmd('adb', ['devices']);
-    console.log('spawnSyncAdbCmd', res);
+    console.log('spawnSyncAdbCmd', res.stdout.toLocaleString());
     expect(res);
   });
 });

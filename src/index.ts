@@ -6,7 +6,7 @@ import {
   ChildProcessWithoutNullStreams,
   spawnSync,
 } from 'child_process';
-import path, { dirname, resolve, relative } from 'path';
+import { resolve, relative } from 'path';
 
 const TIMEOUT = 8 * 10000;
 const base = resolve(__dirname, '..', 'bin');
@@ -30,10 +30,10 @@ export function getAdbFullPath() {
   }
 }
 
-export function getAdbReactivePath() {
+export function getAdbReactivePath(cwd = process.cwd()) {
   try {
     return relative(
-      __dirname,
+      cwd,
       ADB_BINARY_FILE[process.platform as SupportedPlatform]
     );
   } catch (error) {
@@ -68,11 +68,8 @@ export function ensureArgs(
   let cwd = options?.cwd || process.cwd();
   if (!isSystemAdbAvailable()) {
     let cmd = command.split(' ');
-    const binFile = getAdbFullPath();
-    cwd = dirname(binFile);
-    cmd[0] = isSwapn
-      ? `./${path.basename(binFile)}`
-      : `"./${path.basename(binFile)}"`;
+    const binFile = getAdbReactivePath(cwd as string);
+    cmd[0] = isSwapn ? binFile : `"${binFile}`;
     command = cmd.join(' ');
   }
   const res: [string, ExecSyncOptionsWithStringEncoding] = [
