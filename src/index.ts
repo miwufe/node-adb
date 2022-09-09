@@ -62,8 +62,7 @@ export const ipRegExp =
 
 export function ensureArgs(
   command: string,
-  options?: ExecSyncOptionsWithStringEncoding,
-  isSwapn = false
+  options?: ExecSyncOptionsWithStringEncoding
 ) {
   let cwd = options?.cwd || process.cwd();
   if (!isSystemAdbAvailable()) {
@@ -170,7 +169,7 @@ export function spawnAdbCmd(
   args: string[],
   options?: ExecSyncOptionsWithStringEncoding
 ) {
-  const [cmd, opts] = ensureArgs(command, options, true);
+  const [cmd, opts] = ensureArgs(command, options);
   console.log('cmd', cmd, opts);
   return spawn(cmd, args, opts) as ChildProcessWithoutNullStreams;
 }
@@ -184,6 +183,6 @@ export function spawnSyncAdbCmd(
   args?: string[],
   options?: ExecSyncOptionsWithStringEncoding
 ) {
-  const [cmd, opts] = ensureArgs(command, options, true);
+  const [cmd, opts] = ensureArgs(command, options);
   return spawnSync(cmd, args, opts);
 }
