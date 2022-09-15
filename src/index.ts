@@ -6,13 +6,18 @@ import {
   ChildProcessWithoutNullStreams,
   spawnSync,
 } from 'child_process';
-import { resolve, relative } from 'path';
+import { resolve, relative, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dir =
+  typeof require !== 'function'
+    ? dirname(fileURLToPath(import.meta.url))
+    : __dirname;
 
 const TIMEOUT = 8 * 10000;
-const base = resolve(__dirname, '..', 'bin');
+const base = resolve(__dir, '..', 'bin');
 export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
 export type SupportedPlatform = typeof supportedPlatform[number];
-
 export const ADB_BINARY_FILE: Record<SupportedPlatform, string> = {
   win32: resolve(base, 'win/adb.exe'),
   darwin: resolve(base, 'mac/adb'),
