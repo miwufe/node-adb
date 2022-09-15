@@ -10,7 +10,7 @@ import { resolve, relative, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dir =
-  typeof require !== 'function'
+  typeof __dirname === 'undefined'
     ? dirname(fileURLToPath(import.meta.url))
     : __dirname;
 
