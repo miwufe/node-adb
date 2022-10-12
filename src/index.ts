@@ -9,35 +9,32 @@ import {
 import { resolve, relative } from 'path';
 
 const TIMEOUT = 8 * 10000;
+const base = resolve(__dirname, '..', 'bin');
 export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
 export type SupportedPlatform = typeof supportedPlatform[number];
-export const ADB_BINARY_FILE: Record<SupportedPlatform, string> = {
-  win32: resolve('..', 'bin', 'win/adb.exe'),
-  darwin: resolve('..', 'bin', 'mac/adb'),
-  linux: resolve('..', 'bin', 'linux/adb'),
-};
+
+export const ADB_BINARY_FILE = () => ({
+  win32: process.env.NODE_ADB_BIN_PATH_WINDOWS || resolve(base, 'win/adb.exe'),
+  darwin: process.env.NODE_ADB_BIN_PATH_MAC || resolve(base, 'mac/adb'),
+  linux: process.env.NODE_ADB_BIN_PATH_LINUX || resolve(base, 'linux/adb'),
+});
 
 export function getAdbFullPath() {
   try {
-    return ADB_BINARY_FILE[process.platform as SupportedPlatform];
+    return ADB_BINARY_FILE()[process.platform as SupportedPlatform];
   } catch (error) {
     throw new Error(
-      `Sorry, @miwt/adb not support your system, supported platform has ${supportedPlatform.toString()}\n` +
-        error
+      `Sorry, @miwt/adb not support your system, supported platform has ${supportedPlatform.toString()}\n` + error
     );
   }
 }
 
 export function getAdbReactivePath(cwd = process.cwd()) {
   try {
-    return relative(
-      cwd,
-      ADB_BINARY_FILE[process.platform as SupportedPlatform]
-    );
+    return relative(cwd, ADB_BINARY_FILE()[process.platform as SupportedPlatform]);
   } catch (error) {
     throw new Error(
-      `Sorry, @miwt/adb not support your system, supported platform has ${supportedPlatform.toString()}` +
-        error
+      `Sorry, @miwt/adb not support your system, supported platform has ${supportedPlatform.toString()}` + error
     );
   }
 }
@@ -45,9 +42,7 @@ export function getAdbReactivePath(cwd = process.cwd()) {
 /** @description Is there an available ADB in your computer? */
 export function isSystemAdbAvailable() {
   try {
-    return execSync('adb version')
-      .toString()
-      .includes('Android Debug Bridge version');
+    return execSync('adb version').toString().includes('Android Debug Bridge version');
   } catch (e) {
     return false;
   }
@@ -58,14 +53,11 @@ export type AdbDeviceStatus = 'offline' | 'device' | 'unauthorized';
 export const ipRegExp =
   /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):(\d+)$/;
 
-export function ensureArgs(
-  command: string,
-  options?: ExecSyncOptionsWithStringEncoding
-) {
+export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringEncoding) {
   let cwd = options?.cwd || process.cwd();
   if (!isSystemAdbAvailable()) {
     let cmd = command.split(' ');
-    const binFile = getAdbReactivePath(cwd as string);
+    const binFile = getAdbFullPath();
     cmd[0] = binFile;
     command = cmd.join(' ');
   }
@@ -106,10 +98,7 @@ export async function getAdbDevices() {
  *  @description use sync method to run adb commamnd, will return a string
  *  @example execAdbCmdSync('adb devices')
  */
-export function execAdbCmdSync(
-  command: string,
-  options?: ExecSyncOptionsWithStringEncoding
-) {
+export function execAdbCmdSync(command: string, options?: ExecSyncOptionsWithStringEncoding) {
   return execSync(...ensureArgs(command, options)).toString();
 }
 
@@ -117,10 +106,7 @@ export function execAdbCmdSync(
  *  @description use async method to run adb commamnd, will return a string
  *  @example execAdbCmdAsync('adb devices')
  */
-export function execAdbCmdAsync(
-  command: string,
-  options?: ExecSyncOptionsWithStringEncoding & { log?: any }
-) {
+export function execAdbCmdAsync(command: string, options?: ExecSyncOptionsWithStringEncoding & { log?: any }) {
   return new Promise<string>(async (resolve, reject) => {
     // 超过8s，进程自动退出
     exec(...ensureArgs(command, options), (err, stdout) => {
@@ -144,13 +130,8 @@ export function execAdbCmdAsync(
  *  adbShell.stdin.write('ls /data/tmp \n')
  *  adbShell.stdin.write('ls /data/tmp/dir \n')
  */
-export function execAdbCmd(
-  command: string,
-  options?: ExecSyncOptionsWithStringEncoding
-) {
-  return exec(
-    ...ensureArgs(command, options)
-  ) as ChildProcessWithoutNullStreams;
+export function execAdbCmd(command: string, options?: ExecSyncOptionsWithStringEncoding) {
+  return exec(...ensureArgs(command, options)) as ChildProcessWithoutNullStreams;
 }
 
 /**
@@ -162,11 +143,7 @@ export function execAdbCmd(
  *  adbShell.stdin.write('ls /data/tmp \n')
  *  adbShell.stdin.write('ls /data/tmp/dir \n')
  */
-export function spawnAdbCmd(
-  command: string,
-  args: string[],
-  options?: ExecSyncOptionsWithStringEncoding
-) {
+export function spawnAdbCmd(command: string, args: string[], options?: ExecSyncOptionsWithStringEncoding) {
   const [cmd, opts] = ensureArgs(command, options);
   console.log('cmd', cmd, opts);
   return spawn(cmd, args, opts) as ChildProcessWithoutNullStreams;
@@ -176,11 +153,7 @@ export function spawnAdbCmd(
  *  @description use sync spawn method to run adb commamnd, will return a string
  *  @example spawnSyncAdbCmd('adb', ['devices'])
  */
-export function spawnSyncAdbCmd(
-  command: string,
-  args?: string[],
-  options?: ExecSyncOptionsWithStringEncoding
-) {
+export function spawnSyncAdbCmd(command: string, args?: string[], options?: ExecSyncOptionsWithStringEncoding) {
   const [cmd, opts] = ensureArgs(command, options);
   return spawnSync(cmd, args, opts);
 }
