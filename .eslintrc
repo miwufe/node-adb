@@ -11,7 +11,7 @@
   "plugins": ["prettier"],
   "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": "off",
     "no-unused-vars": "warn",
     "no-async-promise-executor": "off"
   },

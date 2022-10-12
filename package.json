@@ -25,7 +25,7 @@
   },
   "scripts": {
     "prepublishOnly": "npm run build",
-    "build": "tsup src/*.ts --format cjs,esm --dts --splitting --clean",
+    "build": "tsup src/index.ts --format cjs,esm --dts --splitting --onSuccess \"cp  src/*.d.ts dist\"",
     "dev": "tsup src/*.ts --watch src",
     "release": "npm run build && npm run ver",
     "lint": "eslint --ext .js,.ts,.json ./",
