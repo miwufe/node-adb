@@ -1,12 +1,12 @@
 # @miwt/adb
 
-## en
-
-@miwt/adb contains adb binary files, so you can use the ADB command in the nodejs program, even if ADB is not installed in the user's computer environment
-
 ## 中文
 
 @miwt/adb 包含 adb 所需的二进制文件，所以你可以在 nodejs 程序中运行 adb 命令，即使用户的电脑上没有安装 adb。
+
+## en
+
+@miwt/adb contains adb binary files, so you can use the ADB command in the nodejs program, even if ADB is not installed in the user's computer environment
 
 # useage
 
@@ -56,4 +56,16 @@ adbShell.stdin.write('ls /data/tmp/dir \n')
 const adbShell = spawnAdbCmd('adb', ['shell'])
 adbShell.stdin.write('ls /data/tmp \n')
 adbShell.stdin.write('ls /data/tmp/dir \n')
+```
+
+## 自定义 adb 二进制文件路径 (Custom binary file path) v6.0+
+
+如果不想使用 node-adb 内置的二进制文件，可以通过设置环境变量的方式自定义 adb 的二进制文件路径。
+
+If you do not want to use the built-in binary files of node adb, you can customize the binary file path of adb by setting environment variables.
+
+```js
+process.env.NODE_ADB_BIN_PATH_MAC = '/custom-path-to-adb';
+process.env.NODE_ADB_BIN_PATH_WINDOWS = '/custom-path-to-adb';
+process.env.NODE_ADB_BIN_PATH_LINUX = '/custom-path-to-adb';
 ```
