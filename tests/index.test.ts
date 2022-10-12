@@ -5,6 +5,7 @@ import {
   execAdbCmd,
   getAdbDevices,
   spawnSyncAdbCmd,
+  isSystemAdbAvailable,
 } from '../src';
 
 describe('run adb cmd', () => {
@@ -58,5 +59,10 @@ describe('api', () => {
     const res = await getAdbDevices();
     console.log('devices:', res);
     expect(res).not.toBeNull();
+  });
+
+  it('isSystemAdbExist', () => {
+    const systemAdbAvailable = isSystemAdbAvailable();
+    console.log('systemAdbAvailable', systemAdbAvailable);
   });
 });
