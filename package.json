@@ -1,6 +1,6 @@
 {
   "name": "@miwt/adb",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "you can use the ADB command in the nodejs program",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
