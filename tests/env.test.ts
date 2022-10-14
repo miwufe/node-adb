@@ -2,19 +2,11 @@ import { execAdbCmdSync, getAdbFullPath } from '../src';
 
 describe('env', () => {
   beforeAll(() => {
-    process.env.NODE_ADB_BIN_PATH_MAC = '/Users/lin/Downloads/归档/node_modules/adb-driver/bin/mac/adb';
-    process.env.NODE_ADB_BIN_PATH_WINDOWS = '/adssadlasdkj';
-    process.env.NODE_ADB_BIN_PATH_LINUX = '/adssadlasdkj';
+    process.env.NODE_ADB_BIN_PATH = '/Users/lin/Downloads/归档/node_modules/adb-driver/bin/mac/adb';
   });
 
   it('env', () => {
-    expect(
-      [
-        process.env.NODE_ADB_BIN_PATH_MAC,
-        process.env.NODE_ADB_BIN_PATH_WINDOWS,
-        process.env.NODE_ADB_BIN_PATH_LINUX,
-      ].includes(getAdbFullPath())
-    ).toBeTruthy();
+    expect(getAdbFullPath()).toBe(process.env.NODE_ADB_BIN_PATH);
   });
 
   it('api', () => {

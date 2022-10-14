@@ -65,7 +65,5 @@ adbShell.stdin.write('ls /data/tmp/dir \n')
 If you do not want to use the built-in binary files of node adb, you can customize the binary file path of adb by setting environment variables.
 
 ```js
-process.env.NODE_ADB_BIN_PATH_MAC = '/custom-path-to-adb';
-process.env.NODE_ADB_BIN_PATH_WINDOWS = '/custom-path-to-adb';
-process.env.NODE_ADB_BIN_PATH_LINUX = '/custom-path-to-adb';
+process.env.NODE_ADB_BIN_PATH = '/custom-path-to-adb';
 ```

@@ -14,9 +14,9 @@ export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
 export type SupportedPlatform = typeof supportedPlatform[number];
 
 export const ADB_BINARY_FILE = () => ({
-  win32: process.env.NODE_ADB_BIN_PATH_WINDOWS || resolve(base, 'win/adb.exe'),
-  darwin: process.env.NODE_ADB_BIN_PATH_MAC || resolve(base, 'mac/adb'),
-  linux: process.env.NODE_ADB_BIN_PATH_LINUX || resolve(base, 'linux/adb'),
+  win32: process.env.NODE_ADB_BIN_PATH || resolve(base, 'win/adb.exe'),
+  darwin: process.env.NODE_ADB_BIN_PATH || resolve(base, 'mac/adb'),
+  linux: process.env.NODE_ADB_BIN_PATH || resolve(base, 'linux/adb'),
 });
 
 export function getAdbFullPath() {
