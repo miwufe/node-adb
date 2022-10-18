@@ -1,6 +1,6 @@
 import { execAdbCmdSync, getAdbFullPath } from '../src';
 
-describe('env', () => {
+describe.skip('env', () => {
   beforeAll(() => {
     process.env.NODE_ADB_BIN_PATH = '/Users/lin/Downloads/归档/node_modules/adb-driver/bin/mac/adb';
   });

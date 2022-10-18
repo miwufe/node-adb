@@ -8,7 +8,7 @@ import {
   isSystemAdbAvailable,
 } from '../src';
 
-describe('run adb cmd', () => {
+describe('core api', () => {
   it('sync', () => {
     const res = execAdbCmdSync('adb devices');
     console.log('sync', res);
@@ -26,9 +26,7 @@ describe('run adb cmd', () => {
     return new Promise<void>((resolve, reject) => {
       res.stdout?.on('data', (data) => {
         console.log('exec', data);
-        expect(
-          data.toString().includes('List of devices attached')
-        ).toBeTruthy();
+        expect(data.toString().includes('List of devices attached')).toBeTruthy();
         resolve();
       });
     });
@@ -39,9 +37,7 @@ describe('run adb cmd', () => {
     return new Promise<void>((resolve, reject) => {
       res.stdout?.on('data', (data) => {
         console.log('spawn', data.toString());
-        expect(
-          data.toString().includes('List of devices attached')
-        ).toBeTruthy();
+        expect(data.toString().includes('List of devices attached')).toBeTruthy();
         resolve();
       });
     });

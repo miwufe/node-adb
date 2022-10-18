@@ -1,7 +1,7 @@
 import path from 'path';
 import { getAdbDevices, installApk, isApkInstalled, uninstallApk } from '../src';
 
-describe('apk', () => {
+describe.skip('apk', () => {
   let device: string;
   const testApp = 'org.hapjs.debugger';
 

@@ -10,6 +10,8 @@ import { resolve, relative } from 'path';
 
 const TIMEOUT = 8 * 10000;
 const base = resolve(__dirname, '..', 'bin');
+let hasSystemAdb: boolean | undefined;
+
 export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
 export type SupportedPlatform = typeof supportedPlatform[number];
 
@@ -41,10 +43,14 @@ export function getAdbReactivePath(cwd = process.cwd()) {
 
 /** @description Is there an available ADB in your computer? */
 export function isSystemAdbAvailable() {
+  if (hasSystemAdb !== undefined) return hasSystemAdb;
   try {
-    return execSync('adb version').toString().includes('Android Debug Bridge version');
+    const res = execSync('adb version').toString().includes('Android Debug Bridge version');
+    hasSystemAdb = res;
+    return hasSystemAdb;
   } catch (e) {
-    return false;
+    hasSystemAdb = false;
+    return hasSystemAdb;
   }
 }
 
