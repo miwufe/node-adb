@@ -1,4 +1,21 @@
 
+### 0.7.1 (2022-10-18)
+
+
+### Features
+
+* 支持自定义adb二进制文件路径 ([13ef8d3](https://github.com/miwufe/node-adb/commit/13ef8d371818f47e6ad50fa78c3d6ade9d6dd4cc))
+* add some tools for apk ([d58377c](https://github.com/miwufe/node-adb/commit/d58377c99b07b74fb4c9b5528f71fa25d89d7c50))
+* add spawnSyncAdbCmd api ([a199d48](https://github.com/miwufe/node-adb/commit/a199d48561501f847bd1028393074667646e3f86))
+
+
+### Bug Fixes
+
+* fix C:\\WINDOWS\\system32\\cmd.exe ENOENT ([9cd00e4](https://github.com/miwufe/node-adb/commit/9cd00e4baf265ffe92f9ee8f8f882c8a4f01f4b5))
+* fix cmd.exe ENOENT error ([3289f2c](https://github.com/miwufe/node-adb/commit/3289f2ce2eaa33fc8f0c73025ea283ddbce53bd4))
+* fix permission denied ([40fefbf](https://github.com/miwufe/node-adb/commit/40fefbf94818ac33ce5a39586072528f2ee23bd9))
+* windows compatible ([366126d](https://github.com/miwufe/node-adb/commit/366126d62241a6f370d6bcfcd494139226ca6d58))
+
 ## 0.7.0 (2022-10-18)
 
 
