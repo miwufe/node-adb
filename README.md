@@ -11,7 +11,7 @@
 # useage
 
 ```ts
-import { getAdbDevices,execAdbCmdSync,execAdbCmdAsync,execAdbCmd} from '@miwt/adb'
+import { getAdbDevices,execAdbCmdSync,execAdbCmdAsync,execAdbCmd } from '@miwt/adb'
 
 /**
  *  get adb devices list
@@ -58,7 +58,35 @@ adbShell.stdin.write('ls /data/tmp \n')
 adbShell.stdin.write('ls /data/tmp/dir \n')
 ```
 
-## 自定义 adb 二进制文件路径 (Custom binary file path) v6.0+
+### Apk 相关（v0.7.0+）：
+
+```ts
+declare function isApkInstalled(
+  sn: string,
+  apkName: string
+): Promise<{
+  status: boolean;
+  msg: string;
+}>;
+
+declare function installApk(
+  sn: string,
+  apkPath: string
+): Promise<{
+  status: boolean;
+  msg: string;
+}>;
+
+declare function uninstallApk(
+  sn: string,
+  apkName: string
+): Promise<{
+  status: boolean;
+  msg: string;
+}>;
+```
+
+## 自定义 adb 二进制文件路径 (Custom binary file path) v0.6.0+
 
 如果不想使用 node-adb 内置的二进制文件，可以通过设置环境变量的方式自定义 adb 的二进制文件路径。
 
