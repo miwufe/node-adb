@@ -13,7 +13,35 @@ const base = resolve(__dirname, '..', 'bin');
 let hasSystemAdb: boolean | undefined;
 
 export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
-export type SupportedPlatform = typeof supportedPlatform[number];
+export type SupportedPlatform = (typeof supportedPlatform)[number];
+
+/**
+ * Enum for specifying the preferred ADB module type.
+ *
+ * @enum {string}
+ * @example
+ * process.env.NODE_ADB_BIN_PATH = '/path/to/your/customBin'
+ * process.env.PRIORITY_ADB_MODULE_TYPE = 'custom'
+ */
+export enum PriorityAdbModuleType {
+  /**
+   * Use the ADB module installed on the host machine.
+   * @type {string}
+   */
+  Host = 'host',
+
+  /**
+   * Use the internal ADB module provided by the plugin.
+   * @type {string}
+   */
+  Internal = 'internal',
+
+  /**
+   * Use a custom ADB module specified by the environment variable `NODE_ADB_BIN_PATH`.
+   * @type {string}
+   */
+  Custom = 'custom',
+}
 
 export const ADB_BINARY_FILE = () => ({
   win32: process.env.NODE_ADB_BIN_PATH || resolve(base, 'win/adb.exe'),
@@ -61,7 +89,11 @@ export const ipRegExp =
 
 export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringEncoding) {
   let cwd = options?.cwd || process.cwd();
-  if (!isSystemAdbAvailable()) {
+  if (
+    process.env.PRIORITY_ADB_MODULE_TYPE === PriorityAdbModuleType.Custom ||
+    process.env.PRIORITY_ADB_MODULE_TYPE === PriorityAdbModuleType.Internal ||
+    !isSystemAdbAvailable()
+  ) {
     let cmd = command.split(' ');
     const binFile = getAdbFullPath();
     cmd[0] = binFile;
