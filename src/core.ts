@@ -82,8 +82,6 @@ export function isSystemAdbAvailable() {
   }
 }
 
-export type AdbDeviceStatus = 'offline' | 'device' | 'unauthorized';
-
 export const ipRegExp =
   /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):(\d+)$/;
 
@@ -108,28 +106,6 @@ export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringE
     } as ExecSyncOptionsWithStringEncoding,
   ];
   return res;
-}
-
-/** @description return adb devices  */
-export async function getAdbDevices() {
-  const list: string = await execAdbCmdAsync('adb devices');
-  return _parseDeviceInfo(list);
-  function _parseDeviceInfo(stdout: string) {
-    if (!stdout) {
-      return [];
-    }
-    const lines = stdout.replace(/(\n|\r\n){1,}/g, '\n').split('\n');
-    const result = lines
-      .filter((item, idx) => {
-        //删除第0个和空元素
-        return idx !== 0 && item !== '';
-      })
-      .map((item) => {
-        const [sn, status] = item.split('\t') as [string, AdbDeviceStatus];
-        return { sn, status };
-      });
-    return result;
-  }
 }
 
 /**
