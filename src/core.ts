@@ -8,6 +8,7 @@ import {
 } from 'child_process';
 import { resolve, relative } from 'path';
 
+
 const TIMEOUT = 8 * 10000;
 const base = resolve(__dirname, '..', 'bin');
 let hasSystemAdb: boolean | undefined;
@@ -84,6 +85,23 @@ export function isSystemAdbAvailable() {
 
 export const ipRegExp =
   /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):(\d+)$/;
+
+/**
+ * get available adb command
+ * 1. host adb command available return 'adb'
+ * 2. custom adb command available return custom adb executable path
+ * 3. return our internal adb executable path
+ */
+export function getAdbCmd() {
+  if (
+    process.env.PRIORITY_ADB_MODULE_TYPE === PriorityAdbModuleType.Custom ||
+    process.env.PRIORITY_ADB_MODULE_TYPE === PriorityAdbModuleType.Internal ||
+    !isSystemAdbAvailable()
+  ) {
+    return getAdbFullPath();
+  }
+  return 'adb';
+}
 
 export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringEncoding) {
   let cwd = options?.cwd || process.cwd();
