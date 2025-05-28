@@ -1,3 +1,9 @@
+### ### 0.10.0 (2025-05-12)
+
+### Features
+
+- feat: update adn bin to 36.0.0-13206524 ([a3e5cbc](https://github.com/miwufe/node-adb/commit/a3e5cbc4bd25aaf0fee39b46660e2f11a57753a7))
+
 ### 0.9.1 (2025-05-12)
 
 ### Features
