@@ -1,4 +1,8 @@
-### ### 0.10.0 (2025-05-12)
+### 0.10.1 (2025-05-29)
+
+- refactor: change timeout to 10s, resolve stderr when execAdbCmdAsync hava stderr not have stdout
+
+### 0.10.0 (2025-05-28)
 
 ### Features
 

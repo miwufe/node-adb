@@ -9,7 +9,7 @@ import {
 import { resolve, relative } from 'path';
 
 
-const TIMEOUT = 8 * 10000;
+const TIMEOUT = 10 * 1000;
 const base = resolve(__dirname, '..', 'bin');
 let hasSystemAdb: boolean | undefined;
 
@@ -141,9 +141,9 @@ export function execAdbCmdSync(command: string, options?: ExecSyncOptionsWithStr
 export function execAdbCmdAsync(command: string, options?: ExecSyncOptionsWithStringEncoding & { log?: any }) {
   return new Promise<string>(async (resolve, reject) => {
     // 超过8s，进程自动退出
-    exec(...ensureArgs(command, options), (err, stdout) => {
+    exec(...ensureArgs(command, options), (err, stdout, stderr) => {
       if (err) return reject(err);
-      const msg: string = stdout.toString();
+      const msg: string = stdout || stderr;
       return resolve(msg);
     });
   });
