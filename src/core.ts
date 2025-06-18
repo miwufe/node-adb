@@ -6,11 +6,16 @@ import {
   ChildProcessWithoutNullStreams,
   spawnSync,
 } from 'child_process';
-import { resolve, relative } from 'path';
-
+import { resolve, relative, dirname } from 'path';
+import { fileURLToPath } from 'url'
 
 const TIMEOUT = 10 * 1000;
-const base = resolve(__dirname, '..', 'bin');
+
+const _dirname = typeof __dirname !== 'undefined'
+  ? __dirname
+  : dirname(fileURLToPath(import.meta.url))
+
+const base = resolve(_dirname, '..', 'bin');
 let hasSystemAdb: boolean | undefined;
 
 export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
