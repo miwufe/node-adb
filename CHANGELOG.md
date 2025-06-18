@@ -1,3 +1,9 @@
+### 0.10.2 (2025-06-18)
+
+### Bug Fixes
+
+- fix \_\_dirname ([507e698](https://github.com/miwufe/node-adb/commit/507e6987f501d392468a961d0decc683ab3f86da))
+
 ### 0.10.1 (2025-05-29)
 
 - refactor: change timeout to 10s, resolve stderr when execAdbCmdAsync hava stderr not have stdout
