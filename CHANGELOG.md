@@ -1,3 +1,9 @@
+### 0.10.3 (2025-06-20)
+
+### Features
+
+- set encoding default value to 'utf8' ([f1ca02b](https://github.com/miwufe/node-adb/commit/f1ca02b3ec717b3d201a9677f8ab4df5888b6bd6))
+
 ### 0.10.2 (2025-06-18)
 
 ### Bug Fixes
