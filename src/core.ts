@@ -79,7 +79,9 @@ export function getAdbReactivePath(cwd = process.cwd()) {
 export function isSystemAdbAvailable() {
   if (hasSystemAdb !== undefined) return hasSystemAdb;
   try {
-    const res = execSync('adb version').toString().includes('Android Debug Bridge version');
+    const res = execSync('adb version', {
+      encoding: 'utf8',
+    }).includes('Android Debug Bridge version');
     hasSystemAdb = res;
     return hasSystemAdb;
   } catch (e) {
@@ -136,7 +138,10 @@ export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringE
  *  @example execAdbCmdSync('adb devices')
  */
 export function execAdbCmdSync(command: string, options?: ExecSyncOptionsWithStringEncoding) {
-  return execSync(...ensureArgs(command, options)).toString();
+  return execSync(...ensureArgs(command, {
+    encoding: 'utf8',
+    ...options,
+  }));
 }
 
 /**
@@ -146,7 +151,10 @@ export function execAdbCmdSync(command: string, options?: ExecSyncOptionsWithStr
 export function execAdbCmdAsync(command: string, options?: ExecSyncOptionsWithStringEncoding & { log?: any }) {
   return new Promise<string>(async (resolve, reject) => {
     // 超过8s，进程自动退出
-    exec(...ensureArgs(command, options), (err, stdout, stderr) => {
+    exec(...ensureArgs(command, {
+      encoding: 'utf-8',
+      ...options,
+    }), (err, stdout, stderr) => {
       if (err) return reject(err);
       const msg: string = stdout || stderr;
       return resolve(msg);
