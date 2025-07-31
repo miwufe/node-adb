@@ -1,3 +1,9 @@
+### 0.10.4 (2025-07-31)
+
+### Bug Fixes
+
+- remove default TIMEOUT ([f97cc7d](https://github.com/miwufe/node-adb/commit/f97cc7dad449baf77dc7f83cdcd3fba49cdc04d3))
+
 ### 0.10.3 (2025-06-20)
 
 ### Features
