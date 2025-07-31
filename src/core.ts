@@ -7,13 +7,9 @@ import {
   spawnSync,
 } from 'child_process';
 import { resolve, relative, dirname } from 'path';
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'url';
 
-const TIMEOUT = 10 * 1000;
-
-const _dirname = typeof __dirname !== 'undefined'
-  ? __dirname
-  : dirname(fileURLToPath(import.meta.url))
+const _dirname = typeof __dirname !== 'undefined' ? __dirname : dirname(fileURLToPath(import.meta.url));
 
 const base = resolve(_dirname, '..', 'bin');
 let hasSystemAdb: boolean | undefined;
@@ -127,7 +123,6 @@ export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringE
     {
       ...options,
       cwd,
-      timeout: options?.timeout || TIMEOUT,
     } as ExecSyncOptionsWithStringEncoding,
   ];
   return res;
@@ -138,10 +133,12 @@ export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringE
  *  @example execAdbCmdSync('adb devices')
  */
 export function execAdbCmdSync(command: string, options?: ExecSyncOptionsWithStringEncoding) {
-  return execSync(...ensureArgs(command, {
-    encoding: 'utf8',
-    ...options,
-  }));
+  return execSync(
+    ...ensureArgs(command, {
+      encoding: 'utf8',
+      ...options,
+    })
+  );
 }
 
 /**
@@ -150,15 +147,17 @@ export function execAdbCmdSync(command: string, options?: ExecSyncOptionsWithStr
  */
 export function execAdbCmdAsync(command: string, options?: ExecSyncOptionsWithStringEncoding & { log?: any }) {
   return new Promise<string>(async (resolve, reject) => {
-    // 超过8s，进程自动退出
-    exec(...ensureArgs(command, {
-      encoding: 'utf-8',
-      ...options,
-    }), (err, stdout, stderr) => {
-      if (err) return reject(err);
-      const msg: string = stdout || stderr;
-      return resolve(msg);
-    });
+    exec(
+      ...ensureArgs(command, {
+        encoding: 'utf-8',
+        ...options,
+      }),
+      (err, stdout, stderr) => {
+        if (err) return reject(err);
+        const msg: string = stdout || stderr;
+        return resolve(msg);
+      }
+    );
   });
 }
 
