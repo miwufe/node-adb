@@ -1,3 +1,9 @@
+### 0.10.5 (2025-08-01)
+
+### Bug Fixes
+
+- inject cjs and esm shims ([97afa5e](https://github.com/miwufe/node-adb/commit/97afa5e663c97fb2c1bdbad4e30c49d9744fe58a))
+
 ### 0.10.4 (2025-07-31)
 
 ### Bug Fixes
