@@ -3,11 +3,13 @@ import {
   execSync,
   spawn,
   ExecSyncOptionsWithStringEncoding,
+  ChildProcess,
   ChildProcessWithoutNullStreams,
   spawnSync,
 } from 'child_process';
 import { resolve, relative, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import treeKill from 'tree-kill';
 
 const _dirname = typeof __dirname !== 'undefined' ? __dirname : dirname(fileURLToPath(import.meta.url));
 
@@ -115,8 +117,11 @@ export function ensureArgs(command: string, options?: ExecSyncOptionsWithStringE
   ) {
     let cmd = command.split(' ');
     const binFile = getAdbFullPath();
-    cmd[0] = binFile;
-    command = cmd.join(' ');
+    cmd[0] = `"${binFile}"`;
+    // On Windows, cmd.exe /s strips the outermost quotes after /c,
+    // so wrapping the whole command in an extra pair of quotes ensures
+    // inner quotes (for the path with spaces) are preserved.
+    command = process.platform === 'win32' ? `"${cmd.join(' ')}"` : cmd.join(' ');
   }
   const res: [string, ExecSyncOptionsWithStringEncoding] = [
     command,
@@ -144,20 +149,42 @@ export function execAdbCmdSync(command: string, options?: ExecSyncOptionsWithStr
 /**
  *  @description use async method to run adb commamnd, will return a string
  *  @example execAdbCmdAsync('adb devices')
+ *  @example execAdbCmdAsync('adb devices', { timeoutMs: 10000 })
  */
-export function execAdbCmdAsync(command: string, options?: ExecSyncOptionsWithStringEncoding & { log?: any }) {
-  return new Promise<string>(async (resolve, reject) => {
-    exec(
+export function execAdbCmdAsync(
+  command: string,
+  options?: ExecSyncOptionsWithStringEncoding & { log?: any; timeoutMs?: number }
+) {
+  const { timeoutMs, ...restOptions } = options || {};
+  return new Promise<string>((resolve, reject) => {
+    const child: ChildProcess = exec(
       ...ensureArgs(command, {
         encoding: 'utf-8',
-        ...options,
+        ...restOptions,
       }),
       (err, stdout, stderr) => {
+        if (timer) clearTimeout(timer);
         if (err) return reject(err);
         const msg: string = stdout || stderr;
         return resolve(msg);
       }
     );
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    if (timeoutMs && timeoutMs > 0 && child.pid) {
+      timer = setTimeout(() => {
+        treeKill(child.pid!, 'SIGKILL', (killErr) => {
+          reject(
+            new AdbTimeoutError(
+              `adb command timed out after ${timeoutMs}ms: ${command}`,
+              command,
+              timeoutMs,
+              killErr ?? undefined
+            )
+          );
+        });
+      }, timeoutMs);
+    }
   });
 }
 
@@ -189,7 +216,6 @@ export function execAdbCmd(command: string, options?: ExecSyncOptionsWithStringE
  */
 export function spawnAdbCmd(command: string, args: string[], options?: ExecSyncOptionsWithStringEncoding) {
   const [cmd, opts] = ensureArgs(command, options);
-  console.log('cmd', cmd, opts);
   return spawn(cmd, args, opts) as ChildProcessWithoutNullStreams;
 }
 
@@ -200,4 +226,46 @@ export function spawnAdbCmd(command: string, args: string[], options?: ExecSyncO
 export function spawnSyncAdbCmd(command: string, args?: string[], options?: ExecSyncOptionsWithStringEncoding) {
   const [cmd, opts] = ensureArgs(command, options);
   return spawnSync(cmd, args, opts);
+}
+
+export class AdbTimeoutError extends Error {
+  readonly command: string;
+  readonly timeoutMs: number;
+  readonly killError?: Error;
+
+  constructor(message: string, command: string, timeoutMs: number, killError?: Error) {
+    super(message);
+    this.name = 'AdbTimeoutError';
+    this.command = command;
+    this.timeoutMs = timeoutMs;
+    this.killError = killError;
+  }
+}
+
+export interface AdbDeadlockDetectorOptions {
+  /** Timeout (ms) for the health-check `adb devices` probe. Default: 5000 */
+  probeTimeoutMs?: number;
+  /** Callback invoked when deadlock is detected (probe process already killed via tree-kill). */
+  onDeadlockDetected?: () => Promise<void> | void;
+}
+
+/**
+ * Probe whether the adb daemon is responsive.
+ * If `adb devices` hangs beyond probeTimeoutMs, the hung process is killed
+ * via tree-kill (timeoutMs in execAdbCmdAsync), then onDeadlockDetected is called.
+ */
+export async function checkAdbHealth(options?: AdbDeadlockDetectorOptions): Promise<boolean> {
+  const { probeTimeoutMs = 5000, onDeadlockDetected } = options || {};
+  try {
+    await execAdbCmdAsync('adb devices', { encoding: 'utf-8', timeoutMs: probeTimeoutMs });
+    return true;
+  } catch (err) {
+    if (err instanceof AdbTimeoutError) {
+      if (onDeadlockDetected) {
+        await onDeadlockDetected();
+      }
+      return false;
+    }
+    throw err;
+  }
 }
