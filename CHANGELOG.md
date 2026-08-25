@@ -1,3 +1,29 @@
+
+### 0.10.6 (2026-08-25)
+
+
+### Features
+
+*  add connectDevice and disconnectDevice api ([0f8b811](https://github.com/miwufe/node-adb/commit/0f8b811775c0808d0f58a1da2e83dc6d5a778e38))
+* 支持自定义adb二进制文件路径 ([13ef8d3](https://github.com/miwufe/node-adb/commit/13ef8d371818f47e6ad50fa78c3d6ade9d6dd4cc))
+* add getAdbCmd api ([afd9ad2](https://github.com/miwufe/node-adb/commit/afd9ad2f3434f7fbe8d15cfd38115a0953b0dfc4))
+* add some tools for apk ([d58377c](https://github.com/miwufe/node-adb/commit/d58377c99b07b74fb4c9b5528f71fa25d89d7c50))
+* add spawnSyncAdbCmd api ([a199d48](https://github.com/miwufe/node-adb/commit/a199d48561501f847bd1028393074667646e3f86))
+* add timeout and deadlock detection to execAdbCmdAsync ([5d56c14](https://github.com/miwufe/node-adb/commit/5d56c14ed3a2681b9f2071a919bb28b4f8b70cff))
+* support `PRIORITY_ADB_MODULE_TYPE`  config ([048347f](https://github.com/miwufe/node-adb/commit/048347f0db0be014c21da017547aa1fe99490ccd))
+* update adn bin to 36.0.0-13206524 ([0c84a5f](https://github.com/miwufe/node-adb/commit/0c84a5f953913d6cdf6d8663d3688bda44dee67a))
+
+
+### Bug Fixes
+
+* fix __dirname ([507e698](https://github.com/miwufe/node-adb/commit/507e6987f501d392468a961d0decc683ab3f86da))
+* fix C:\\WINDOWS\\system32\\cmd.exe ENOENT ([9cd00e4](https://github.com/miwufe/node-adb/commit/9cd00e4baf265ffe92f9ee8f8f882c8a4f01f4b5))
+* fix cmd.exe ENOENT error ([3289f2c](https://github.com/miwufe/node-adb/commit/3289f2ce2eaa33fc8f0c73025ea283ddbce53bd4))
+* fix permission denied ([40fefbf](https://github.com/miwufe/node-adb/commit/40fefbf94818ac33ce5a39586072528f2ee23bd9))
+* inject cjs and esm shims ([97afa5e](https://github.com/miwufe/node-adb/commit/97afa5e663c97fb2c1bdbad4e30c49d9744fe58a))
+* remove default TIMEOUT ([f97cc7d](https://github.com/miwufe/node-adb/commit/f97cc7dad449baf77dc7f83cdcd3fba49cdc04d3))
+* windows compatible ([366126d](https://github.com/miwufe/node-adb/commit/366126d62241a6f370d6bcfcd494139226ca6d58))
+
 ### 0.10.5 (2025-08-01)
 
 ### Bug Fixes
