@@ -11,9 +11,14 @@ import { resolve, relative, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import treeKill from 'tree-kill';
 
-const _dirname = typeof __dirname !== 'undefined' ? __dirname : dirname(fileURLToPath(import.meta.url));
-
-const base = resolve(_dirname, '..', 'bin');
+let _base: string | undefined;
+const getBase = () => {
+  if (_base !== undefined) return _base;
+  const dir =
+    typeof __dirname !== 'undefined' ? __dirname : dirname(fileURLToPath(import.meta.url));
+  _base = resolve(dir, '..', 'bin');
+  return _base;
+};
 let hasSystemAdb: boolean | undefined;
 
 export const supportedPlatform = ['win32', 'darwin', 'linux'] as const;
@@ -48,9 +53,9 @@ export enum PriorityAdbModuleType {
 }
 
 export const ADB_BINARY_FILE = () => ({
-  win32: process.env.NODE_ADB_BIN_PATH || resolve(base, 'win/adb.exe'),
-  darwin: process.env.NODE_ADB_BIN_PATH || resolve(base, 'mac/adb'),
-  linux: process.env.NODE_ADB_BIN_PATH || resolve(base, 'linux/adb'),
+  win32: process.env.NODE_ADB_BIN_PATH || resolve(getBase(), 'win/adb.exe'),
+  darwin: process.env.NODE_ADB_BIN_PATH || resolve(getBase(), 'mac/adb'),
+  linux: process.env.NODE_ADB_BIN_PATH || resolve(getBase(), 'linux/adb'),
 });
 
 export function getAdbFullPath() {
