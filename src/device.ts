@@ -2,9 +2,26 @@ import { execAdbCmdAsync } from './core';
 
 export type AdbDeviceStatus = 'offline' | 'device' | 'unauthorized';
 
+/**
+ * Upper bound for `adb devices`. A healthy call returns in tens of
+ * milliseconds; without any bound a wedged adb server leaves the returned
+ * promise pending forever, and callers that poll keep spawning more adb
+ * processes on top of the stuck one.
+ */
+export const DEFAULT_ADB_DEVICES_TIMEOUT_MS = 10_000;
+
+export interface GetAdbDevicesOptions {
+  /** Override the default bound. Pass a tighter value when polling. */
+  timeoutMs?: number;
+}
+
 /** @description return adb devices  */
-export async function getAdbDevices() {
-  const list: string = await execAdbCmdAsync('adb devices');
+export async function getAdbDevices(options?: GetAdbDevicesOptions) {
+  const { timeoutMs = DEFAULT_ADB_DEVICES_TIMEOUT_MS } = options || {};
+  const list: string = await execAdbCmdAsync('adb devices', {
+    encoding: 'utf-8',
+    timeoutMs,
+  });
   return _parseDeviceInfo(list);
   function _parseDeviceInfo(stdout: string) {
     if (!stdout) {
